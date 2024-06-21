@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 typedef struct Node {
   int value;
   struct Node *next;
@@ -29,25 +30,65 @@ int length(Node *node) {
   return count;
 }
 
-void WrongPush(Node *node, int data) {
-  /* Node *newNode = &(Node){.value = data, .next = node}; */
-  Node *newNode = malloc(sizeof(Node));
-  newNode->value = data;
-  newNode->next = node;
-  node = newNode;
+void insert_node(Node **node, int data) {
+  Node *new_node = malloc(sizeof(Node));
+  new_node->value = data;
+  new_node->next = *node;
+
+  *node = new_node;
 }
 
-void Push(Node **node, int data) {
-  Node *newNode = malloc(sizeof(Node));
-  newNode->value = data;
-  newNode->next = *node;
+Node *search_list(Node *head, int value) {
+  if (head == NULL) {
+    return NULL;
+  }
 
-  *node = newNode;
+  if (head->value == value) {
+    return head;
+  }
+
+  return search_list(head->next, value);
+}
+
+Node *item_ahead(Node *node, Node *node2) {
+  if (node == NULL || node->next == NULL) {
+    return NULL;
+  }
+
+  if (node->next == node2) {
+    return node;
+  }
+
+  return item_ahead(node->next, node2);
+}
+
+void delete_node(Node **head, Node *node) {
+  Node *prev_node = item_ahead(*head, node);
+  prev_node->next = node->next;
+  free(node);
+}
+
+void print_list(Node *head) {
+  Node *current = head;
+  while (current != NULL) {
+    printf("%d", current->value);
+    current = current->next;
+    if (current != NULL) {
+      printf(" -> ");
+    }
+  }
+  printf("\n");
 }
 
 int main() {
   Node *head = BuildOneTwoThree();
-  Push(&head, 0);
-  /* printf("%p\n", &head); */
-  /* printf("head: %d\n", head->value); */
+  insert_node(&head, 0);
+
+  /* printf("OG Head: %p\n", head->next->next); */
+  /* Node *new = search_list(head, 2); */
+  /* printf("%p\n", new); */
+  /* printf("head: %d\n", head->next->value); */
+  print_list(head);
+  delete_node(&head, head->next);
+  print_list(head);
 }
