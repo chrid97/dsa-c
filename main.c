@@ -1,23 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+
 typedef struct Node {
   int value;
   struct Node *next;
 } Node;
-
-Node *BuildOneTwoThree() {
-  Node *head = malloc(sizeof(Node));
-  head->next = malloc(sizeof(Node));
-  head->next->next = malloc(sizeof(Node));
-
-  head->value = 1;
-  head->next->value = 2;
-  head->next->next->value = 3;
-  head->next->next->next = NULL;
-
-  return head;
-}
 
 int length(Node *node) {
   int count = 0;
@@ -68,6 +55,25 @@ void delete_node(Node **head, Node *node) {
   free(node);
 }
 
+Node *array_to_list(int *array, int array_len) {
+  if (array_len == 0) {
+    return NULL;
+  }
+  Node *head = malloc(sizeof(Node));
+  head->value = array[0];
+  head->next = NULL;
+
+  Node *current_node = head;
+  for (int i = 1; i < array_len; i++) {
+    current_node->next = malloc(sizeof(Node));
+    current_node = current_node->next;
+    current_node->value = array[i];
+    current_node->next = NULL;
+  }
+
+  return head;
+}
+
 void print_list(Node *head) {
   Node *current = head;
   while (current != NULL) {
@@ -81,14 +87,7 @@ void print_list(Node *head) {
 }
 
 int main() {
-  Node *head = BuildOneTwoThree();
-  insert_node(&head, 0);
-
-  /* printf("OG Head: %p\n", head->next->next); */
-  /* Node *new = search_list(head, 2); */
-  /* printf("%p\n", new); */
-  /* printf("head: %d\n", head->next->value); */
-  print_list(head);
-  delete_node(&head, head->next);
+  int arr[3] = {0, 1, 2};
+  Node *head = array_to_list(arr, 3);
   print_list(head);
 }
