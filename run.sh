@@ -1,1 +1,1 @@
-clang main.c && ./a.out
+./build.sh && ./build/program
