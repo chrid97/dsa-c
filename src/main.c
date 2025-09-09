@@ -51,15 +51,47 @@ void RemoveNode(node *Head, node *DeleteNode) {
   // 2
   // 3
   // 5
-  if (Head->NextNode == DeleteNode && DeleteNode->NextNode != NULL) {
-    Head->NextNode = DeleteNode->NextNode;
-    DeleteNode->NextNode = NULL;
-    return;
+
+  // if (Head == DeleteNode) {
+  //   Head = Head->NextNode;
+  // }
+  //
+  // if (Head->NextNode == DeleteNode && DeleteNode->NextNode != NULL) {
+  //   Head->NextNode = DeleteNode->NextNode;
+  //   DeleteNode->NextNode = NULL;
+  //   return;
+  // }
+  // RemoveNode(Head->NextNode, DeleteNode);
+
+  node *PreviousNode = NULL;
+  while (1) {
+    if (Head == DeleteNode) {
+      Head = DeleteNode->NextNode;
+      printf("Head %p\n", Head);
+      break;
+    }
+
+    printf("PreviousNode %p", PreviousNode);
+    PreviousNode = Head;
+    Head = Head->NextNode;
   }
-  RemoveNode(Head->NextNode, DeleteNode);
 }
 
 int main(void) {
+  int n = 10;
+  int y = 11;
+  printf("addr=%p\n", &n);
+  printf("addr=%p\n\n", &y);
+  int *np = &n;
+  int *yp = &y;
+  printf("np=%p\n", np);
+  printf("yp=%i\n", *yp);
+
+  printf("np=%p\n", np);
+  printf("yp=%i\n", *yp);
+
+  printf("------------------\n");
+
   node Head = {.Value = 1, .NextNode = NULL};
   node Node2 = {.Value = 2, .NextNode = NULL};
   node Node3 = {.Value = 3, .NextNode = NULL};
@@ -76,6 +108,6 @@ int main(void) {
   AppendNode(&Head, &Node5);
   PrintEachNode(&Head, 0);
   printf("---------------\n");
-  RemoveNode(&Head, &Node4);
+  RemoveNode(&Head, &Head);
   PrintEachNode(&Head, 0);
 }
